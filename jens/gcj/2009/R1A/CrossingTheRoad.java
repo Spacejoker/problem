@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -74,18 +75,16 @@ public class CrossingTheRoad {
 	CrossInfo cross[][];
 	void solve() throws IOException {
 		
-		String result = "3";
-		
 		rows = nextInt();
 		columns = nextInt();
 		
 		cross = new CrossInfo[rows][columns];
 		boolean[][] visitedPos = new boolean[rows*2][columns*2];
+		int[][] bestPosValue = new int[rows*2][columns*2];
 
 		for (int i = 0; i < visitedPos.length; i++) {
-			for (int j = 0; j < visitedPos[i].length; j++) {
-				visitedPos[i][j] = false;
-			}
+			Arrays.fill(bestPosValue[i], Integer.MAX_VALUE);
+			Arrays.fill(visitedPos[i], false);
 		}
 		
 		for (int i = 0; i < rows; i++) {
@@ -96,7 +95,7 @@ public class CrossingTheRoad {
 		
 		int bestTime = Integer.MAX_VALUE;
 		
-		bestTime = move(rows*2 -1 , 0, 0, bestTime, visitedPos);
+		bestTime = move(rows*2 -1 , 0, 0, bestTime, visitedPos, bestPosValue);
 		
 		out.println(bestTime); 
 		System.out.println(bestTime);
@@ -108,16 +107,22 @@ public class CrossingTheRoad {
 	
 	Map<String, Integer> cache;
 	
-	private int move(int i, int j, int currentTime,  int bestTime, boolean[][] visitedPos) {
+	private int move(int i, int j, int currentTime,  int bestTime, boolean[][] visitedPos, int[][] bestPosValue) {
 		
-		if (i < 0 || j > columns * 2 -1){
+		if (i < 0 || j > columns * 2 -1){ //hmm? :)
 			return bestTime;
 		}
 		
 		StringBuilder b = new StringBuilder();
 		String rep = b.append(i).append(delimiter).append(j).toString();
 		
-		if(bestTime < currentTime){		
+		if(currentTime < bestPosValue[i][j]){
+			bestPosValue[i][j] = currentTime;
+		} else {
+			return bestTime;
+		}
+		
+		if(bestTime <= currentTime ){		
 			return bestTime;
 		}
 		
@@ -135,50 +140,52 @@ public class CrossingTheRoad {
 		
 		visitedPos[i][j] = true;
 		
-		//try going in all forward dirs, going back is not sane
 		//try up
 		if(i > 0 && visitedPos[i-1][j] == false){
 			if(i % 2 == 0){ //go the pavement way
-				bestTime = move(i -1, j, currentTime + 2, bestTime, visitedPos);	
+				bestTime = move(i -1, j, currentTime + 2, bestTime, visitedPos, bestPosValue);	
 			} else { //cros street
 				int time = timeUntilGreen( Direction.VERTICAL, getGraphPos(i), getGraphPos(j), currentTime);
-				bestTime = move(i -1, j, currentTime + time +1, bestTime, visitedPos);	
+				bestTime = move(i -1, j, currentTime + time +1, bestTime, visitedPos, bestPosValue);	
 			}
 		}
 				
 		//try right
 		if(j < columns*2 -1 && visitedPos[i][j+1] == false){
 			if(j % 2 == 1){
-				bestTime = move(i, j+1, currentTime + 2, bestTime, visitedPos);	
+				bestTime = move(i, j+1, currentTime + 2, bestTime, visitedPos, bestPosValue);	
 			} else {
 				int time = timeUntilGreen( Direction.HORIZIONAL, getGraphPos(i), getGraphPos(j), currentTime);
-				bestTime = move(i, j+1, currentTime + time + 1, bestTime, visitedPos);	
+				bestTime = move(i, j+1, currentTime + time + 1, bestTime, visitedPos, bestPosValue);	
 			}
 		}
 		
 		//try down
 		if(i < rows*2 - 1 && visitedPos[i+1][j] == false){
 			if(i % 2 == 0){ //go the pavement way
-				int time = timeUntilGreen( Direction.VERTICAL, getGraphPos(i), getGraphPos(j), currentTime);
-				bestTime = move(i +1, j, currentTime + time +1, bestTime, visitedPos);	
+//				int time = timeUntilGreen( Direction.VERTICAL, getGraphPos(i), getGraphPos(j), currentTime);
+//				bestTime = move(i +1, j, currentTime + time +1, bestTime, visitedPos, bestPosValue);	
 					
-			} else { //cros street
-				bestTime = move(i +1, j, currentTime + 2, bestTime, visitedPos);	
+			} else {
+				bestTime = move(i +1, j, currentTime + 2, bestTime, visitedPos, bestPosValue);	
 			}
 		}
 		
 		//try left
-		if(j > 0 ){
-			if(j % 2 == 1 && visitedPos[i][j-1] == false){
-				int time = timeUntilGreen( Direction.HORIZIONAL, getGraphPos(i), getGraphPos(j), currentTime);
-				bestTime = move(i, j-1, currentTime + time + 1, bestTime, visitedPos);	
+		if(j > 0  && visitedPos[i][j-1] == false){
+			if(j % 2 == 1 ){
+//				int time = timeUntilGreen( Direction.HORIZIONAL, getGraphPos(i), getGraphPos(j), currentTime);
+//				bestTime = move(i, j-1, currentTime + time + 1, bestTime, visitedPos, bestPosValue);	
 			} else {
-				bestTime = move(i, j-1, currentTime + 2, bestTime, visitedPos);	
+				bestTime = move(i, j-1, currentTime + 2, bestTime, visitedPos, bestPosValue);	
 			}
 		}
 		
 		cache.put(rep, bestTime);
 		visitedPos[i][j] = false;
+		
+//		System.out.println("Returning best time from i: " + i + ", j: " + j + " with value of: " + bestTime);
+		
 		return bestTime;
 		
 	}
