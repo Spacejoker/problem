@@ -1,0 +1,26 @@
+Mon 2012-08-27
+Prep lecture 9:45-10:30
+Topcoder 10:30 - 13:00
+SRM 552 
+div1 250 - tut ok
+div1 500 - tut ok
+div1 500 - redo 18:11
+
+Topcoder 13:25 - 15:00
+SRM 500
+div1 300 - rest, robot walking on grid
+div1 500 - tut ok
+
+SF1630 15:15 - 17:00
+Rekursiva funktioner, lösning i analogi med homogena och ickehomogena diffekvationer. Lös homogena ekv med karaktäristiska ekvationen och vidare icke homogena som en summa av homogena + partikulärlösning med ansats.
+
+Codeforces match 17:30 - 18:15
+Round 135 div2
+1 ok
+2 WA
+3 TLE
+4 -
+
+Tis 2012-08-28
+Prep / upsolving 09:00 - 10:00
+
