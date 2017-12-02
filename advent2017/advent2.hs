@@ -1,4 +1,4 @@
--- Solution to advent 2017, day 1, part 2
+-- Solution to advent 2017, day 2
 module Main where
 import Data.List
 import Data.Char
@@ -6,19 +6,19 @@ import Data.Char
 solveA :: [[Int]] -> Int
 solveA rows = sum $ map (\x -> (maximum x) - (minimum x)) rows
 
+solveB :: [[Int]] -> Int 
+solveB rows = sum $ map findQuotient rows
+
 findQuotient :: [Int] -> Int
 findQuotient (x:xs)
- | length divide > 0 = fst $ head divide -- // (max x (head f)) `quot` (min x (head f))
+ | length divide > 0 = fst $ head divide
  | otherwise = findQuotient xs
     where divide = filter (\(_, rem) -> rem == 0) quotAndRem
           quotAndRem = map (\y ->  (max x y) `quotRem` (min x y)) xs
 
-solveB :: [[Int]] -> Int 
-solveB rows = sum $ map findQuotient rows
-
 main = do
-  putStrLn $ show $ solveA input
-  putStrLn $ show $ solveB input
+  putStrLn $ "First star: " ++ (show $ solveA input)
+  putStrLn $ "Second star: " ++ (show $ solveB input)
     where input = [[3458,3471,163,1299,170,4200,2425,167,3636,4001,4162,115,2859,130,4075,4269],
                    [2777,2712,120,2569,2530,3035,1818,32,491,872,113,92,2526,477,138,1360],
                    [2316,35,168,174,1404,1437,2631,1863,1127,640,1745,171,2391,2587,214,193],
