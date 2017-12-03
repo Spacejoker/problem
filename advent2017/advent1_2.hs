@@ -8,8 +8,9 @@ splitInTwo list = splitAt index list
     where index = (length list) `div` 2
 
 evalPair :: (Char, Char) -> Int
-evalPair (x, x) = (digitToInt x) * 2
-evalPair _ = 0
+evalPair (x,y)
+ | x == y = (digitToInt x) * 2
+ | otherwise = 0
 
 solve :: String -> Int
 solve s = sum values
