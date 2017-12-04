@@ -1,4 +1,4 @@
--- Solution to advent 2017, day 2
+-- Solution to advent 2017, day 3
 module Main where
 import Data.List
 import Data.Char
@@ -13,3 +13,4 @@ manhattan value = distFromMid + depth
 
 main = do
   putStrLn $ show $ manhattan 325489
+
