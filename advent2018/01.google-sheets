@@ -1,0 +1,8 @@
+First star:
+* Copy the deltas into column A.
+* B2=B1+A2
+
+Second star is a bit harder.
+* Repeat the above columns for 150k rows
+* Set C column to be: =if(countifs(B:B, B2)>1, 1,"")
+* The first element with 1 in column C is the answer, for me it was on row 128k-something.
