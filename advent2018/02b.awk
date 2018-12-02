@@ -5,7 +5,7 @@
     for(j = i+1; j <= NF; j++) { 
       mis = 0
       common = ""
-      for (k = 0; k < length($i); k++){
+      for (k = 1; k <= length($i); k++){
         if (substr($i,k,1) != substr($j,k,1)) {
           mis = mis + 1
         } else {
