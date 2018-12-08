@@ -1,0 +1,12 @@
+Used pen and paper for this one.
+
+A directed graph with 101 edges, 26 nodes. Took 3-4 hours total, including two failed tries on the first star. Main strategy:
+
+1. Create the adjacency list (A), and a list of the same length but with only NULL entries (B).
+2. For each node with no null entries in B, expand the out edges. This means adding the from-node to instead of one of the NULL elements in the target array.
+3. Order of visitation should obviously tie break on topological sort of node name.
+
+The key part (which made me stop failing), was to creat the extra bookkeeping to be able to backtrack from an invalid state to the error.
+
+
+B was basically the same problem as A on paper, except it required some addition. Number of workers was never limiting in my test case.
