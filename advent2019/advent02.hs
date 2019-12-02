@@ -9,7 +9,7 @@ import Data.List.Split
 -- CPU implementation
 --
 -- 1: ADD regA regB targetReg
--- 1: MUL regA regB targetReg
+-- 2: MUL regA regB targetReg
 --
 -- Returns reg0
 --
