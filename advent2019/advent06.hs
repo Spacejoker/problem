@@ -15,13 +15,18 @@ makeParentMap m [] = m
 makeParentMap m ((p,c):xs) = makeParentMap (HM.insert c p m) xs
 
 countSteps :: HashMap String String -> (String, String) -> Int
--- countSteps m (_,child) = 1
 countSteps m (_,child) = case x of
          Just n -> (1::Int) + (countSteps m ("",n))
          Nothing -> 0
    where x = HM.lookup child m
 
--- firstStar :: String -> [(String, String)]
+enumerateSteps :: HashMap String String -> (String, String) -> [String]
+enumerateSteps m (_,child) = case x of
+         Just n -> (n:(enumerateSteps m ("",n)))
+         Nothing -> []
+   where x = HM.lookup child m
+
+firstStar :: String -> Int
 firstStar s = sum steps
   where pairs = DL.map makePair (lines s)
         hashMap = makeParentMap HM.empty pairs
@@ -29,7 +34,13 @@ firstStar s = sum steps
         
 
 secondStar :: String -> Int
-secondStar s = 42
+secondStar s = totalNodes - 2*intersectionNodes
+  where pairs = DL.map makePair (lines s)
+        hashMap = makeParentMap HM.empty pairs
+        mySteps = enumerateSteps hashMap ("", "YOU")
+        santaSteps = enumerateSteps hashMap ("", "SAN")
+        totalNodes = (DL.length mySteps) + (DL.length santaSteps)
+        intersectionNodes = DL.length (intersect santaSteps mySteps)
 
 solve :: String -> String
 solve s = "A: " ++ (show (firstStar s)) ++ "\n"
