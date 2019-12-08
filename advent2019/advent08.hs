@@ -1,4 +1,4 @@
--- Solution to advent 2019, day 6
+-- Solution to advent 2019
 module Main where
 import Data.List as DL
 import Data.List.Split
