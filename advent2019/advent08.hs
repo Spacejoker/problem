@@ -26,11 +26,28 @@ firstStar s = (numberLookup el 1) * (numberLookup el 2)
         counts = map numberCount layers
         el = minimumBy minimumZeroComparator counts
 
-secondStar :: String -> Int
-secondStar s = 42
+offset = 25*6
+
+findPixel :: String -> Int -> Char
+findPixel s n
+ | c == '2' = findPixel s (n+offset)
+ | c == '1' = '.'
+ | otherwise = '#'
+   where c = s !! n
+
+secondStar :: String -> [String]
+secondStar s = splitEvery 25 evaluated
+  where evaluated = map (findPixel s) [0..offset]
 
 solve :: String -> String
 solve s = "A: " ++ (show (firstStar s)) ++ "\n"
     ++ "B: " ++ (show (secondStar s)) ++ "\n"
 
 main = interact solve
+
+-- ".######..#....##..##.##.#"
+-- ".#######.#.####.##.#.##.#"
+-- ".#######.#...##.####....#"
+-- ".#######.#.####.####.##.#"
+-- ".####.##.#.####.##.#.##.#"
+-- "....##..##....##..##.##.#"
