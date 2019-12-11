@@ -37,24 +37,30 @@ toData grid (x, y) (x1, y1) = (angle, distance, x1*100 + y1)
 
 
 -- constructList :: [String] -> (Int, Int) -> [(Double, Double, Int)]
-constructList grid (x, y) = sortedGroupsByDistance
+constructList grid (x, y) = reverseSorted
   where points = [(xp, yp) | xp <- [0..ymax], yp <- [0..ymax], ((grid !! yp) !! xp) == '#', (xp/=x || yp /= y)]
         d = sortBy (compare `on` (\(a,_,_)->a)) (map (toData grid (x, y)) points)
         grouped = groupBy (\(a1, _, _) (a2, _, _) ->  a1 == a2) d
-        sortedGroupsByDistance = map (sortBy (compare `on` (\(a,_,_)->a))) grouped
+        sortedGroupsByDistance = reverse (map (sortBy (compare `on` (\(_,a,_)->a))) grouped)
+        reverseSorted = map reverse sortedGroupsByDistance
 
-findX n list pos
-  | 
-  | length inner > 0 = 
-
-    where inner = list !! (pos `mod` (length list))
+findX list pos n
+  | length inner <= lap = findX list (pos+1) n
+  | length inner > lap  && n > 0 = findX list (pos +1) (n-1) 
+  | length inner > lap && n == 0 = (reverse inner) !! lap -- (pos `mod` (length list))
+    where listIndex = pos `mod` (length list)
+          inner = list !! listIndex
+          lap = pos `quot` (length list)
+           
 
 --secondStar :: String -> [Double]
-secondStar s = res
+secondStar s = zip [1..] res
   where grid = lines s
-        candidates = map (constructList grid) [(17, 23)]
-        res = findX 200 candidates 0
+        candidates = head (map (constructList grid) [(17, 23)])
+        res = map (\(_,_,pos) -> pos) ( map (findX candidates 0) [0..200])
 
+-- 905 too high
+-- 1009 too high
 
 solve :: String -> String
 solve s = "A: " ++ (show (firstStar s)) ++ "\n"
