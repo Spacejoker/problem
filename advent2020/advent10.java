@@ -7,25 +7,26 @@ import static java.lang.Math.*;
 
 public class advent10 {
 
-	InputStreamReader inp = new InputStreamReader(System.in);
-	BufferedReader in = new BufferedReader(inp);
-	static final boolean TEST = false;
-
 	public static void main(String[] args) throws Exception {
-		new advent10();
+		new advent10(true);
+		new advent10(false);
 	}
 
-	public advent10() throws Exception {
-		String[] input = readLines();
+	public advent10(boolean test) throws Exception {
+		run(test);
+	}
 
+	private void run(boolean test) throws Exception {
+		String[] input = readLines(test);
 		long t0 = System.currentTimeMillis();
 		long solutionA = solveFirst(input);
 		long solutionB = solveSecond(input);
 		long t1 = System.currentTimeMillis();
 
 		System.out.printf("Answer 1: %d\nAnswer 2: %d\n", solutionA, solutionB);
-		System.out.printf("Time: %dms", t1 - t0);
+		System.out.printf("Time: %dms\n", t1 - t0);
 	}
+
 	private long solveFirst(String[] input) {
 		int[] n = new int[input.length + 2];
 		int max = 0;
@@ -33,14 +34,8 @@ public class advent10 {
 			n[i] = Integer.valueOf(input[i]);
 			max = Math.max(n[i], max);
 		}
-
-		// need to end at 153
-		System.out.print(max);
 		Arrays.sort(n);
 		int cur = 0, a =0, b = 0;
-
-		// there is one dp: [at pos i][with value z]
-		//long dp[][] = new long[n.length][200];
 		
 		for (int i= 0;i < n.length; i++) {
 			int delta = n[i] - cur;
@@ -52,6 +47,7 @@ public class advent10 {
 	}
 
 	int MAX_VAL = 0;
+
 	private long solveSecond(String[] input) {
 		int[] n = new int[input.length];
 		MAX_VAL = 0;
@@ -59,7 +55,6 @@ public class advent10 {
 			n[i] = Integer.valueOf(input[i]);
 			MAX_VAL = Math.max(n[i], MAX_VAL);
 		}
-		// need to end at 153
 		Arrays.sort(n);
 		return go(n, -1, 0);
 	}
@@ -84,10 +79,9 @@ public class advent10 {
 		return ways;
 	}
 
-	String[] readLines() throws Exception {
-
-		String filename = TEST ? "advent2020/test.txt" : "advent2020/input.txt";
-		in = new BufferedReader(new FileReader(filename));
+	String[] readLines(boolean test) throws Exception {
+		String filename = test ? "advent2020/test.txt" : "advent2020/input.txt";
+		BufferedReader in = new BufferedReader(new FileReader(filename));
 		List<String> values = new ArrayList<>();
 		String s;
 		while ((s = in.readLine()) != null) {
