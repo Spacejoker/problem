@@ -1,9 +1,9 @@
-import java.io.*;
-import java.math.*;
-import java.util.*;
-import java.util.Map.Entry;
-
-import static java.lang.Math.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 public class advent13 {
 
@@ -105,7 +105,7 @@ public class advent13 {
 	}
 
 	private long solveSecond(String[] input) {
-		int zzz = Integer.valueOf(input[0]);
+		Integer.valueOf(input[0]);
 		String[] split = input[1].split(",");
 		int[] n = new int[split.length];
 		for (int i= 0; i < split.length; i++) {
@@ -113,17 +113,14 @@ public class advent13 {
 			n[i] = Integer.valueOf(split[i]);
 		}
 		
-
 		long t = n[0];
-		long firstHit = 0;
 		LinkedList<Cycle> cycles = new LinkedList<>();
-		out: for (int i = 1 ; i < n.length; i++) {
+		for (int i = 1 ; i < n.length; i++) {
 			if (n[i] == 0)continue;
 			cycles.push(getCycle(t,n[i], i));
 		}
 		while(cycles.size() > 1) {
 			Collections.shuffle(cycles);
-			System.out.println(cycles.size());
 			Cycle a = cycles.pop();
 			Cycle b = cycles.pop();
 			cycles.push(reduceCycles(a, b));
@@ -139,6 +136,7 @@ public class advent13 {
 		while ((s = in.readLine()) != null) {
 			values.add(s);
 		}
+		in.close();
 		return values.stream().toArray(String[]::new);
 	}
 }

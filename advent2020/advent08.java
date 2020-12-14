@@ -1,9 +1,8 @@
-import java.io.*;
-import java.math.*;
-import java.util.*;
-import java.util.Map.Entry;
-
-import static java.lang.Math.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class advent08 {
 
@@ -93,7 +92,6 @@ public class advent08 {
 	}
 
 	private long solveSecond(String[] input) {
-		int acc =0 ;
 		for(int i =0 ;i < input.length; i++ ) {
 			if (input[i].split(" ")[0].equals("nop")) {
 				input[i] = input[i].replace("nop", "jmp");

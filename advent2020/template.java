@@ -1,9 +1,7 @@
-import java.io.*;
-import java.math.*;
-import java.util.*;
-import java.util.Map.Entry;
-
-import static java.lang.Math.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class template {
 
@@ -43,6 +41,7 @@ public class template {
 		while ((s = in.readLine()) != null) {
 			values.add(s);
 		}
+		in.close();
 		return values.stream().toArray(String[]::new);
 	}
 }

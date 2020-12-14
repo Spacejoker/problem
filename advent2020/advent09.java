@@ -1,9 +1,8 @@
-import java.io.*;
-import java.math.*;
-import java.util.*;
-import java.util.Map.Entry;
-
-import static java.lang.Math.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class advent09 {
 
@@ -97,31 +96,6 @@ public class advent09 {
 			}
 		}
 		return -1;
-	}
-
-	private int tryRun(String[] input) {
-		int pc = 0; int acc = 0;
-		boolean[]seen = new boolean[input.length];
-		while(true) {
-			if (pc == input.length) {return acc;}
-			if (pc > input.length) return -1;
-			if (seen[pc]) {return -1;}
-			seen[pc] =true;
-			String[] split = input[pc].split(" ");
-			if (split[0].equals("nop")) {
-				pc ++;
-				continue;
-			}
-			if (split[0].equals("jmp")) {
-				pc += Integer.valueOf(split[1]);
-				continue;
-			}
-			if (split[0].equals("acc")) {
-				pc ++;
-				acc += Integer.valueOf(split[1]);
-				continue;
-			}
-		}
 	}
 
 	String[] readLines() throws Exception {
