@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class advent14 {
+public class brute {
 
 	public static void main(String[] args) throws Exception {
-		new advent14(true);
-		new advent14(false);
+		new brute(true);
+		new brute(false);
 	}
 
-	public advent14(boolean test) throws Exception {
+	public brute(boolean test) throws Exception {
 		run(test);
 	}
 
@@ -76,6 +76,7 @@ public class advent14 {
 	private long solveSecond(String[] input) {
 		String mask = "";
 		List<Write> writes = new ArrayList<>();
+		Map<Long, Long> reg = new HashMap<>();
 		for (String s : input) {
 			String[] split = s.split("=");
 			String op = split[0].trim();
@@ -99,60 +100,35 @@ public class advent14 {
 				}
 				// Create the new mask
 				writes.add(new Write(newMask, opVal));
+				expanded.clear();
+				expand(newMask, 0, 0);
+				for(long k : expanded) {
+					reg.put(k, opVal);
+				}
 			}
 		}
-		int numWrites = writes.size();
 		long sum = 0;
-		out: for (int i = numWrites-1; i>= 0; i--) {
-			Write lastWrite = writes.get(i);
-			String modMask = lastWrite.mask;
-			for (int j = numWrites -1 ; j > i; j--) {
-        String prevWrite = writes.get(j).mask;
-				if (prevWrite.length() ==0) continue;
-				// Mod your thing;
-				modMask = mod(modMask, prevWrite);
-				if (modMask.length() == 0) continue out;
-			}
-			lastWrite.mask = modMask;
-			long pow = 1;
-			for (int j =0 ; j < modMask.length(); j++ ){
-				if (modMask.charAt(j) == 'X') pow *= 2;
-			}
-			sum += pow * lastWrite.value;
-		} 
+		for (Entry<Long, Long> entry : reg.entrySet()) {
+			sum += entry.getValue();
+		}
 		return sum;
 	}
 
-	private String mod(String modMask, String mask) {
-		int len = modMask.length();
-		boolean modified = false;
-		char[] newMask = new char[len];
-		for (int i = len-1; i >= 0; i--) {
-			char c1 = modMask.charAt(i);
-			char c2 = mask.charAt(i);
-			if (c1 == '0' && c2 == '1')return modMask;
-			if (c1 == '1' && c2 == '0')return modMask;
-			if (c1 == c2) {
-				newMask[i] = c1;
-			} else if (c1 == 'X') {
-				newMask[i] = c2 == '1' ? '0' : '1';
-				modified = true;
-			} else if (c2 == 'X') {
-				newMask[i] = c1;
-			}
-		}
-		String ret = "";
-		if (modified) {
-			for (int i= 0; i < newMask.length; i++) {
-				ret += ""+newMask[i];
-			}
-		}
-		return ret;
-	}
+	List<Long> expanded = new ArrayList<>();
 
+	private void expand(String newMask, int i, long value) {
+		if (i == 36) {expanded.add(value);return;};
+		long pow = 1L << i;
+		char c = newMask.charAt(i);
+		if (c == '1' || c == 'X') {
+			expand(newMask, i+1, value + pow);
+		}
+		if (c == '0' || c == 'X') {
+			expand(newMask, i+1, value);
+		}
+	}
 	// 2332017537958
 	// 2342318523013
-	// 2881082759597
 
 	String[] readLines(boolean test) throws Exception {
 		String filename = test ? "advent2020/test.txt" : "advent2020/input.txt";
