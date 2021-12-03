@@ -2,3 +2,4 @@ node_modules/
 bin/
 **swp
 input.txt
+test.txt

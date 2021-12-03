@@ -7,7 +7,7 @@
   "main": "bin/main.js",
   "scripts": {
     "test": "jasmine",
-    "start": "node bin/02.js",
+    "start": "node bin/03.js",
     "server": "node bin/server.js",
     "static": "PORT=3001  node bin/static.js"
   },
