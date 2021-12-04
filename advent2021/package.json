@@ -7,7 +7,7 @@
   "main": "bin/main.js",
   "scripts": {
     "test": "jasmine",
-    "start": "node bin/03.js",
+    "start": "node bin/04.js",
     "server": "node bin/server.js",
     "static": "PORT=3001  node bin/static.js"
   },
@@ -28,4 +28,3 @@
     "readline": "^1.3.0"
   }
 }
-
