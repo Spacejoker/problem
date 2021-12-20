@@ -32,7 +32,40 @@ function toNum(input) {
     return Number(input[y].charAt(x));
   }
 }
+
+function go(pos, nodes, curPath, visited, double) {
+  //console.log('curPath', curPath.length, curPath, visited);
+  if (pos == 'end') {
+    console.log(curPath);
+    return 1;
+  }
+  let ans = 0;
+  const destinations = nodes[pos];
+  for (const d of destinations) {
+    const singleVisit = d.toLowerCase() == d;
+    if (d == 'start')continue;
+    if (singleVisit && visited.indexOf(d) >= 0){
+      if (!double) {
+        //console.log('dd', double, d);
+        ans += go(d, nodes, [...curPath, pos], [...visited, d], d);
+      }
+      continue;
+    }
+    ans += go(d, nodes, [...curPath, pos], [...visited, d], double);
+  }
+  return ans;
+}
+
 function solve(input) {
-  return 0;
+  const nodes : any = {};
+  for (const row of input) {
+    let a = '', b = '';
+    [a, b] = row.split('-');
+    if (!nodes[a]) nodes[a] = [b];
+    else nodes[a].push(b);
+    if (!nodes[b]) nodes[b] = [a];
+    else nodes[b].push(a);
+  }
+  return go('start', nodes, [], ['start'], '');
 }
 
