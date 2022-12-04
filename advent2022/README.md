@@ -1,7 +1,8 @@
-# Test
+### Day 1
+vimscript
 
-hm?
+### Day 2
+Google sheets, actually not too bad for this task.
 
-## Does github render a readme here?
-
-Maybe
+### Day 3
+Perl keeps impressing.
