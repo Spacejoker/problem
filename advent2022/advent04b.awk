@@ -1,4 +1,4 @@
-# echo "$(($(cat input.txt | wc -l) * $(awk -f advent04.awk < input.txt  | wc -l)))"
+# echo "$(($(cat input.txt | wc -l) - $(awk -f advent04.awk < input.txt  | wc -l)))"
 {
   split($0,X,",");
   split(X[1], a,"-");
