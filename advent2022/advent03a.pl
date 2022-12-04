@@ -1,3 +1,5 @@
+# $ perl advent03a.pl < input.txt
+
 use strict;
 use warnings;
 
