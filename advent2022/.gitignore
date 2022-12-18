@@ -1,2 +1,6 @@
 input.txt
 languages.txt
+test.txt
+bin/
+node_modules/
+package-lock.json
