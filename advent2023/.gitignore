@@ -1,0 +1,8 @@
+input.txt
+example.txt
+languages.txt
+test.txt
+*.js
+bin/
+node_modules/
+package-lock.json

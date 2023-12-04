@@ -61,10 +61,12 @@ function solve(input) {
     }
   }
   for (const v of Object.values(found)) {
-    if ((v as any).length ==2) {
-      sum += v[0] * v[1];
+    const V : number[] = v as any;
+
+    if (V.length ==2) {
+      sum += V[0] * V[1];
     }
   }
-  console.log(found);
+  // console.log(found);
   return sum;
 }
