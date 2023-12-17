@@ -25,7 +25,7 @@ function cmp(a, b) {
   return a == b;
 }
 
-function checkGrid(grid, oldVal) {
+function findGridSymmetryRow(grid, oldVal) {
   for (let i= 0; i < grid.length -1 ; i++) {
     let same = true;
     for (let j = 0; j <= i; j++) {
@@ -43,8 +43,8 @@ function checkGrid(grid, oldVal) {
 
 }
 
-function solveGrid(grid, oldVal = 0) {
-  let ans = checkGrid(grid, oldVal/100);
+function findGridSymmetryValue(grid, oldVal = 0) {
+  let ans = findGridSymmetryRow(grid, oldVal/100);
   if (ans > 0) return ans * 100;
   const t : any= [];
   for (let c =0 ; c < grid[0].length; c++) {
@@ -54,7 +54,7 @@ function solveGrid(grid, oldVal = 0) {
     }
     t.push(s)
   }
-  return checkGrid(t, oldVal);
+  return findGridSymmetryRow(t, oldVal);
 }
 function updateCharacter(str: string, index: number, newChar: string): string {
     if (index < 0 || index >= str.length || newChar.length !== 1) {
@@ -77,7 +77,7 @@ function solve(input) {
     if (row.length == 0) {
       const allVals = new Set<number>();
       const origGrid = [...grid];
-      const oldVal  = solveGrid(grid);
+      const oldVal  = findGridSymmetryValue(grid);
       allVals.add(oldVal);
       out:for (let y= 0; y < grid.length; y++) {
         for (let x =0 ; x < grid[0].length; x++) {
@@ -85,7 +85,7 @@ function solve(input) {
           const c = grid[y].charAt(x);
           grid[y] = grid[y].substring(0, x) + (c == '#' ? '.' : '#') + grid[y].substring(x + 1);
           const tmp = [...grid];
-          r = solveGrid(grid, oldVal);
+          r = findGridSymmetryValue(grid, oldVal);
           grid[y] = grid[y].substring(0, x) + c + grid[y].substring(x + 1);
           if (r > 0) {
             allVals.add(r);
@@ -101,5 +101,3 @@ function solve(input) {
   }
   return sum;
 }
-// 30726 too low
-// 36116 too low
