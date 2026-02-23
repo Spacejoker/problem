@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro DJ Demo</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family: 'Courier New', monospace;
+        overflow: hidden;
+      }
+
+      canvas {
+        display: block;
+        margin: 0 auto;
+        width: 512px;
+        height: 448px;
+        image-rendering: pixelated;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <canvas id="canvas" width="256" height="224"></canvas>
+    </div>
+
+    <script src="world.js"></script>
+    <script src="loader.js"></script>
+    <script>
+
+      let init = false;
+      // framerate = 60
+      const state = {
+        dx: 1,
+        dy: 0,
+        x: 0,
+        y : 0,
+        // Last time we changed inputs / movement
+        lastChange : 0,
+        //
+        lastAttack : 0,
+        frame : 0,
+        facingDirection : 'down',
+      };
+      
+      // Main animation function
+      function runGame(canvas, djName) {
+
+
+        // Render state
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        let lastFrame = 0;
+
+        function mainLoop(timestamp) {
+          const timeDelta = timestamp - lastFrame;
+          if (timeDelta < 1000/60) {
+            requestAnimationFrame(mainLoop);
+            return;
+          }
+          // State updates.
+          state.frame += 1;
+          if (!state.nextChangeFrame || state.frame >= state.nextChangeFrame || checkCollission(state)) {
+            state.nextChangeFrame = state.frame + 50 + Math.floor(Math.random()*150);
+            state.facingDirection = ['up','down','left','right'][Math.floor(Math.random() * 4)];
+            //state.facingDirection = 'down';
+            state.dx = 0;
+            state.dy = 0;
+            switch(state.facingDirection) {
+              case 'up':
+                state.dy = -1;
+                break;
+              case 'down':
+                state.dy = 1;
+                break;
+              case 'left':
+                state.dx = -1;
+                break;
+              case 'right':
+                state.dx = 1;
+                break;
+            }
+            // set dx / dy
+          }
+          // nextTileFree?
+          if (!checkCollission(state)) {
+            state.x += state.dx;
+            state.y += state.dy;
+          }
+
+          lastFrame += 1000/60;
+
+          ctx.fillStyle = '#003';
+          ctx.fillRect(0, 0, width, height);
+          ctx.font = "48px serif";
+
+          // Draw background
+          drawBackground(ctx, state)
+
+          function drawAi(ctx, ai) {
+            // animation frame
+            const numFramesPerAf = 6;
+
+            // down
+            const af = Math.floor((state.frame % (ai.num_frames * numFramesPerAf))/numFramesPerAf);
+            let spriteX = ai.x0 + ai.dx*af;
+            if (ai.frameOffsets?.[af]) {
+              spriteX += ai.frameOffsets?.[af] ?? 0
+            }
+
+            if (ai.invert) {
+              ctx.save();
+              ctx.translate(120 + ai.w, 112);
+              ctx.scale(-1, 1);
+              ctx.drawImage(state.sprites, spriteX, ai.y0, ai.w, ai.h, 0, 0, ai.w, ai.h);
+              ctx.restore();
+            } else {
+              ctx.drawImage(state.sprites, spriteX, ai.y0, ai.w, ai.h, 120, 112, ai.w, ai.h);
+            }
+
+          }
+
+          switch(state.facingDirection) {
+            case 'up':
+              drawAi(ctx, { x0: 1, y0: 109, w: 17, h: 26, dx: 17, num_frames: 9, frameOffsets: [-1,0,0,0,0,0,0,0,0]})
+              break;
+            case 'down':
+              drawAi(ctx, { x0: 1, y0: 1, w: 17, h: 26, dx: 17, num_frames: 9})
+              break;
+            case 'right':
+              drawAi(ctx, { x0: 1, y0: 57, w: 17, h: 26, dx: 18, num_frames: 9})
+              break;
+            case 'left':
+              drawAi(ctx, { x0: 1, y0: 57, w: 17, h: 26, dx: 18, num_frames: 9, invert:true})
+              break;
+          }
+
+          requestAnimationFrame(mainLoop);
+        }
+
+        mainLoop();
+      }
+
+      const canvas = document.getElementById('canvas');
+
+      const main = async () => {
+        state.sprites = await loadAssets();
+        state.sprites = clearOutChromaKey(state.sprites, [[0,64,64], [0,128,128]])
+        state.bg = await loadBg();
+        runGame(canvas, "HiTech");
+      }
+      main();
+    </script>
+  </body>
+</html>
